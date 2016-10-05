@@ -12,8 +12,13 @@ import ca.concordia.dfrs.bean.Flight;
 import ca.concordia.dfrs.server.DFRSServerMTL;
 import ca.concordia.dfrs.server.DFRSServerNDL;
 import ca.concordia.dfrs.server.DFRSServerWST;
+import ca.concordia.dfrs.utils.Log;
+import ca.concordia.dfrs.utils.Result;
+import ca.concordia.dfrs.utils.Utils;
 
 public class ManagerClient {
+	private static final String LOG_PATH = Log.LOG_DIR+"LOG_Manager"+"/";
+	private String managerName = "default";
 	private static IManager manager;
 	
 	private void showMenu() {
@@ -44,26 +49,40 @@ public class ManagerClient {
 	}
 	
 	private void showBookedMenu() {
-		System.out.println("Please select the record type (1-4)");
-		System.out.println("1. First Class");
-		System.out.println("2. Bussiness Class");
-		System.out.println("3. Economy Class");
-		System.out.println("4. ALL");
+		String m = "Please select the record type (1-4)";
+		String m1 = "1. First Class";
+		String m2 = "2. Bussiness Class";
+		String m3= "3. Economy Class";
+		String m4= "4. ALL";
+		System.out.println(m);
+		System.out.println(m1);
+		System.out.println(m2);
+		System.out.println(m3);
+		System.out.println(m4);
+		String s = "-"+managerName + " Choose ";
 		
 		Scanner keyboard = new Scanner(System.in);
 		int userChoice = validInputOption(keyboard, 4);
 		String type = "";
 		switch (userChoice) {
 		case 1:
+			s+=m4;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.FIRST_CLASS;
 			break;
 		case 2:
+			s+=m4;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.BUSINESS_CLASS;
 			break;
 		case 3:
+			s+=m4;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.ECONOMY_CLASS;
 			break;
 		case 4:
+			s+=m4;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.ALL_CLASS;
 			break;
 		default:
@@ -71,9 +90,12 @@ public class ManagerClient {
 		}
 		try {
 			String value = manager.getBookedFlightCount(type);
-			System.out.println("get Booked Flight Count:" + value);
+			s = "-Get Booked Flight Count:" + value;
+			System.out.println(s);
+			Log.i(LOG_PATH+managerName+".txt", s);
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			Log.e(LOG_PATH+managerName+".txt", e.getMessage());
 		}
 	}
 	
@@ -87,16 +109,29 @@ public class ManagerClient {
 	}
 	
 	private void showEditFlghtOptionMenu(int recordId) {
-		System.out.println("Please select the field name (1-6)");
-		System.out.println("1. Departure place");//\n  11 Montreal\n  12 Washington\n  13 New Delhi");
-		System.out.println("2. Departure date");
-		System.out.println("3. Destination place");//\n  31 Montreal\n  32 Washington\n  33 New Delhi");
-		System.out.println("4. First Class seats");
-		System.out.println("5. Business Class seats");
-		System.out.println("6. Economy Class seats");
+		String m[] = {"Please select the field name (1-6)",
+					"1. Departure place",
+					"2. Departure date",
+					"3. Destination place",
+					"4. First Class seats",
+					"5. Business Class seats",
+					"6. Economy Class seats"};
+		System.out.println(m[0]);
+		System.out.println(m[1]);
+		System.out.println(m[2]);
+		System.out.println(m[3]);
+		System.out.println(m[4]);
+		System.out.println(m[5]);
+		System.out.println(m[6]);
+		String s = "-"+managerName + " Input record Is: "+recordId;
+		Log.i(LOG_PATH+managerName+".txt", s);
 		
 		Scanner keyboard = new Scanner(System.in);
 		int userChoice = validInputOption(keyboard, 6);
+		
+		s = "-"+managerName + " Choose " + m[userChoice];
+		Log.i(LOG_PATH+managerName+".txt", s);
+		
 		int seats = -1;
 		String fieldName = "";
 		String value = "";
@@ -109,6 +144,8 @@ public class ManagerClient {
 			} else if(city == 3) {
 				value = "New Delhi";
 			}
+			s = "-"+managerName + " Choose " + value;
+			Log.i(LOG_PATH+managerName+".txt", s);
 		} else {
 			System.out.println("Please enter new field value");
 			if(userChoice > 3) {
@@ -122,9 +159,28 @@ public class ManagerClient {
 					}
 				}
 				value = seats + "";
+			} else if(userChoice == 2) {
+				boolean valid = false;
+				// Enforces a valid integer input.
+				while (!valid) {
+					try {
+						value = keyboard.next();
+						if(Utils.validDate(value))
+							valid = true;
+						else {
+							throw new Exception();
+						}
+					} catch (Exception e) {
+						System.out.println("Invalid Input, please enter Date like 20161010\n");
+						valid = false;
+						keyboard.nextLine();
+					}
+				}
 			} else {
 				value = keyboard.next();
 			}
+			s = "-"+managerName + " Enter New Value: " + value;
+			Log.i(LOG_PATH+managerName+".txt", s);
 		}
 		try {
 			switch (userChoice) {
@@ -149,8 +205,10 @@ public class ManagerClient {
 			default:
 				System.out.println("Invalid Input, please try again.");
 			}
-			Flight result = manager.editFlightRecord(recordId, fieldName, value);
-			System.out.println("Edit Flight Record Success:\n" + result.toString());
+			Result result = manager.editFlightRecord(recordId, fieldName, value);
+			s = "-"+managerName + " " + result.getContent();
+			Log.i(LOG_PATH+managerName+".txt", s);
+			System.out.println(result.getContent());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -176,20 +234,30 @@ public class ManagerClient {
 	}
 
 	private void showOptionMenu(Scanner keyboard) {
-		System.out.println("Please select your option (1-3)");
-		System.out.println("1. Get Booked Flight Count");
-		System.out.println("2. Edit Flight Record");
-		System.out.println("3. Exit");
-		
+		String m = "Please select your option (1-3)";
+		String m1 = "1. Get Booked Flight Count";
+		String m2 = "2. Edit Flight Record";
+		String m3= "3. Exit";
+		System.out.println(m);
+		System.out.println(m1);
+		System.out.println(m2);
+		System.out.println(m3);
+		String s = "-"+managerName + " Choose ";
 		int userChoice = validInputOption(keyboard, 3);
 		switch (userChoice) {
 		case 1:
+			s+=m1;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			showBookedMenu();
 			break;
 		case 2:
+			s+=m2;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			showEditMenu();
 			break;
 		case 3:
+			s+=m3;
+			Log.i(LOG_PATH+managerName+".txt", s);
 			System.out.println("Have a nice day!");
 			keyboard.close();
 			System.exit(0);
@@ -203,10 +271,14 @@ public class ManagerClient {
 		try {
 			String registryURL = "rmi://localhost:"+port+"/" + IManager.INTERFACE_NAME;
 			manager = (IManager) Naming.lookup(registryURL);
-			System.out.println("Lookup completed ");
+			String s = "\nNew Manager:"+managerName+"\n-Connect Server Successful";
+			System.out.println(s);
+			Log.i(LOG_PATH+managerName+".txt", s);
 			return true;
 		} catch (ConnectException e) {
-			System.out.println("Failed to find Server, please try again.\n");//because:" + e.getMessage());
+			String s = "-Failed to find Server, please try again.\n";
+			System.out.println(s);
+			Log.e(LOG_PATH+managerName+".txt", s);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -257,6 +329,7 @@ public class ManagerClient {
 				keyboard.nextLine();
 			}
 		}
+		managerName = userInput;
 		if (initConnection(getServerPort(userInput))) {
 			showOptionMenu(keyboard);
 		} else {
@@ -265,6 +338,7 @@ public class ManagerClient {
 	}
 	
 	public static void main(String[] args) {
+		Log.createLogDir(LOG_PATH);
 		new ManagerClient().initPage();
 	}
 }

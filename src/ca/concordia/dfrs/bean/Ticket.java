@@ -15,8 +15,8 @@ public class Ticket {
 	
 	public Ticket() {};
 	
-	public Ticket(String firstName, String lastName, String address, String phone, String ticketClass, String departure,
-			String departureDate, String destination) {
+	public Ticket(String firstName, String lastName, String address, String phone, String destination, String departureDate,
+			String ticketClass, String departure) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;

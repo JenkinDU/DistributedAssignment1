@@ -7,7 +7,7 @@ public class DFRSServerWST extends DFRSServer {
 	
 	public static void main(String[] args) {
 		try {
-			(new DFRSServerWST()).exportServer(SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
+			(new DFRSServerWST()).exportServer("Washington", SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

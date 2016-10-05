@@ -7,7 +7,7 @@ public class DFRSServerMTL extends DFRSServer {
 	
 	public static void main(String[] args) {
 		try {
-			(new DFRSServerMTL()).exportServer(SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
+			(new DFRSServerMTL()).exportServer("Montreal", SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

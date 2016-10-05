@@ -7,7 +7,7 @@ public class DFRSServerNDL extends DFRSServer {
 	
 	public static void main(String[] args) {
 		try {
-			(new DFRSServerNDL()).exportServer(SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
+			(new DFRSServerNDL()).exportServer("New Delhi", SERVER_NAME, PORT_NUM, UDP_PORT_NUM);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

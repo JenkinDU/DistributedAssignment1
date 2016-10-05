@@ -11,6 +11,8 @@ import ca.concordia.dfrs.bean.Ticket;
 import ca.concordia.dfrs.server.DFRSServerMTL;
 import ca.concordia.dfrs.server.DFRSServerNDL;
 import ca.concordia.dfrs.server.DFRSServerWST;
+import ca.concordia.dfrs.utils.Result;
+import ca.concordia.dfrs.utils.Utils;
 
 public class PassengerClient {
 	private static IPassenger passenger;
@@ -99,14 +101,31 @@ public class PassengerClient {
 	
 	public void departureDate(Scanner keyboard) {
 		System.out.println("\nPlease input your Departure Date:\n");
-		ticket.setDepartureDate(keyboard.next());
+		boolean valid = false;
+		String input = "";
+		// Enforces a valid integer input.
+		while (!valid) {
+			try {
+				input = keyboard.next();
+				if(Utils.validDate(input))
+					valid = true;
+				else {
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				System.out.println("Invalid Input, please enter Date like 20161010\n");
+				valid = false;
+				keyboard.nextLine();
+			}
+		}
+		ticket.setDepartureDate(input);
 	}
 
 	private boolean initConnection(int port) {
 		try {
 			String registryURL = "rmi://localhost:"+port+"/" + IPassenger.INTERFACE_NAME;
 			passenger = (IPassenger) Naming.lookup(registryURL);
-			System.out.println("Lookup completed ");
+			System.out.println("Lookup completed and Connect Successful");
 			return true;
 		} catch (ConnectException e) {
 			System.out.println("Failed to find Server, please try again.");//because:" + e.getMessage());
@@ -149,13 +168,9 @@ public class PassengerClient {
 				departureDate(keyboard);
 				step++;
 				try {
-					boolean success = passenger.bookFlight(ticket.getFirstName(), ticket.getLastName(), ticket.getAddress(),
+					Result success = passenger.bookFlight(ticket.getFirstName(), ticket.getLastName(), ticket.getAddress(),
 							ticket.getPhone(), ticket.getDestination(), ticket.getDepartureDate(), ticket.getTicketClass());
-					if(success) {
-						System.out.println("Success! Thank you!\n");
-					} else {
-						System.out.println("Failed! Please try again.\n");
-					}
+					System.out.println(success.getContent());
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
