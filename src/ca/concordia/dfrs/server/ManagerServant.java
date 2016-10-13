@@ -20,6 +20,7 @@ import ca.concordia.dfrs.database.FlightData;
 import ca.concordia.dfrs.database.TicketData;
 import ca.concordia.dfrs.utils.Log;
 import ca.concordia.dfrs.utils.Result;
+import ca.concordia.dfrs.utils.Utils;
 
 public class ManagerServant extends UnicastRemoteObject implements IManager {
 
@@ -218,7 +219,7 @@ public class ManagerServant extends UnicastRemoteObject implements IManager {
 					s = "     -"+f.toString();
 					System.out.println(s);
 					Log.i(LOG_PATH, s);
-					PassengerServant.printFlight(this.server);
+					Utils.printFlight(this.server);
 				}
 				break;
 			}
@@ -245,7 +246,7 @@ public class ManagerServant extends UnicastRemoteObject implements IManager {
 			s = "["+server+"]-"+"Can't Find Record Create A New One:" + f.toString();
 			System.out.println(s);
 			Log.i(LOG_PATH, s);
-			PassengerServant.printFlight(this.server);
+			Utils.printFlight(this.server);
 		}
 		result.setSuccess(r);
 		result.setContent(info);

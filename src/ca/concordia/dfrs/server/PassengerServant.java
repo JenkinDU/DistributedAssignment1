@@ -3,7 +3,6 @@ package ca.concordia.dfrs.server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
 
 import ca.concordia.dfrs.api.IPassenger;
 import ca.concordia.dfrs.bean.Flight;
@@ -12,6 +11,7 @@ import ca.concordia.dfrs.database.FlightData;
 import ca.concordia.dfrs.database.TicketData;
 import ca.concordia.dfrs.utils.Log;
 import ca.concordia.dfrs.utils.Result;
+import ca.concordia.dfrs.utils.Utils;
 
 public class PassengerServant extends UnicastRemoteObject implements IPassenger {
 
@@ -23,7 +23,7 @@ public class PassengerServant extends UnicastRemoteObject implements IPassenger 
 		this.name = name;
 		this.server = server;
 		LOG_PATH=LOG_PATH+server+"/"+server+"_LOG.txt";
-		printFlight(server);
+		Utils.printFlight(server);
 	}
 
 	@Override
@@ -70,16 +70,7 @@ public class PassengerServant extends UnicastRemoteObject implements IPassenger 
 		Log.i(LOG_PATH, s);
 		result.setSuccess(r);
 		result.setContent(info);
-		printFlight(server);
+		Utils.printFlight(server);
 		return result;
-	}
-
-	public static void printFlight(String server) {
-		List<Flight> flight = FlightData.getInstance().initData(server);
-		System.out.println("ID\tDEP\t\tDES\t\tDATE\t\tF/B/E");
-		for(Flight f:flight) {
-			System.out.println(f.getRecordID()+"\t"+f.getDeparture()+"\t"+f.getDestination()+"\t"+f.getDepartureDate()
-			+"\t"+f.getBalanceFirstTickets()+"/"+f.getBalanceBusinessTickets()+"/"+f.getBalanceEconomyTickets());
-		}
 	}
 }
