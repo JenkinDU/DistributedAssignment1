@@ -121,9 +121,9 @@ public class ManagerServant extends UnicastRemoteObject implements IManager {
 			value +=getCountFromOtherServers(recordType, "localhost", DFRSServerWST.UDP_PORT_NUM);
 			value += ("," + server + " " +count);
 		}
-		s = "     -"+"Reply Value Is: " + value;
-		System.out.println("\n"+s);
-		Log.i(LOG_PATH, s);
+		s = "Reply Value Is: " + value;
+		System.out.println("\n"+"["+server+"]-"+s);
+		Log.i(LOG_PATH, "     -"+s);
 		return value;
 	}
 

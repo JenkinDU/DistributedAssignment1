@@ -52,8 +52,8 @@ public class ManagerClient {
 		String m = "Please select the record type (1-4)";
 		String m1 = "1. First Class";
 		String m2 = "2. Bussiness Class";
-		String m3= "3. Economy Class";
-		String m4= "4. ALL";
+		String m3 = "3. Economy Class";
+		String m4 = "4. ALL";
 		System.out.println(m);
 		System.out.println(m1);
 		System.out.println(m2);
@@ -66,17 +66,17 @@ public class ManagerClient {
 		String type = "";
 		switch (userChoice) {
 		case 1:
-			s+=m4;
+			s+=m1;
 			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.FIRST_CLASS;
 			break;
 		case 2:
-			s+=m4;
+			s+=m2;
 			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.BUSINESS_CLASS;
 			break;
 		case 3:
-			s+=m4;
+			s+=m3;
 			Log.i(LOG_PATH+managerName+".txt", s);
 			type = Flight.ECONOMY_CLASS;
 			break;
@@ -237,7 +237,7 @@ public class ManagerClient {
 		String m = "Please select your option (1-3)";
 		String m1 = "1. Get Booked Flight Count";
 		String m2 = "2. Edit Flight Record";
-		String m3= "3. Exit";
+		String m3 = "3. Exit";
 		System.out.println(m);
 		System.out.println(m1);
 		System.out.println(m2);

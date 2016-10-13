@@ -70,14 +70,16 @@ public class PassengerServant extends UnicastRemoteObject implements IPassenger 
 		Log.i(LOG_PATH, s);
 		result.setSuccess(r);
 		result.setContent(info);
+		printFlight(server);
 		return result;
 	}
 
 	public static void printFlight(String server) {
 		List<Flight> flight = FlightData.getInstance().initData(server);
-		System.out.println("ID\tDEP\t\tDES\t\tDATE");
+		System.out.println("ID\tDEP\t\tDES\t\tDATE\t\tF/B/E");
 		for(Flight f:flight) {
-			System.out.println(f.getRecordID()+"\t"+f.getDeparture()+"\t"+f.getDestination()+"\t"+f.getDepartureDate());
+			System.out.println(f.getRecordID()+"\t"+f.getDeparture()+"\t"+f.getDestination()+"\t"+f.getDepartureDate()
+			+"\t"+f.getBalanceFirstTickets()+"/"+f.getBalanceBusinessTickets()+"/"+f.getBalanceEconomyTickets());
 		}
 	}
 }
